@@ -8,7 +8,7 @@ env:
     KBC_DEVELOPERPORTAL_APP: keboola.app-merge-branche-storage
     KBC_DEVELOPERPORTAL_USERNAME: !!binary a2Vib29sYSthcHBfbWVyZ2VfYnJhbmNoZV9zdG9yYWdlX2doX2FjdGlvbnPC
     KBC_DEVELOPERPORTAL_PASSWORD: '${{ secrets.KBC_DEVELOPERPORTAL_PASSWORD }}'
-    DOCKERHUB_USER: ''
+    DOCKERHUB_USER: 'keboolabot'
     DOCKERHUB_TOKEN: '${{ secrets.DOCKERHUB_TOKEN }}'
     KBC_STORAGE_TOKEN: '${{ secrets.KBC_STORAGE_TOKEN }}'
     KBC_TEST_PROJECT_URL: ''
