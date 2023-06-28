@@ -6,16 +6,21 @@ namespace Keboola\MergeBrancheStorage\Configuration;
 
 use Keboola\Component\Config\BaseConfigDefinition;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
+use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 
 class SynchronizeConfigDefinition extends BaseConfigDefinition
 {
-    protected function getParametersDefinition(): ArrayNodeDefinition
+    protected function getRootDefinition(TreeBuilder $treeBuilder): ArrayNodeDefinition
     {
-        $parametersNode = parent::getParametersDefinition();
+        $rootNode = parent::getRootDefinition($treeBuilder);
         // @formatter:off
         /** @noinspection NullPointerExceptionInspection */
-        $parametersNode->ignoreExtraKeys();
+        $rootNode
+            ->children()
+                ->scalarNode('configId')->isRequired()->cannotBeEmpty()->end()
+            ->end()
+        ;
         // @formatter:on
-        return $parametersNode;
+        return $rootNode;
     }
 }

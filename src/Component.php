@@ -27,7 +27,7 @@ class Component extends BaseComponent
         $clientFactory = new ClientFactory($this->getConfig());
         $application = new Application($clientFactory->getClient(), $this->getLogger(), $this->getDataDir());
 
-        $application->synchronizeResources($this->getConfig()->getEnvKbcConfigId());
+        $application->synchronizeResources($this->getConfig()->getConfigId());
 
         return [
             'status' => 'success',

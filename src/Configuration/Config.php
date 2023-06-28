@@ -10,9 +10,13 @@ class Config extends BaseConfig
 {
     public const COMPONENT_ID = 'keboola.app-merge-branche-storage';
 
-    public function getBranchId(): string
+    public function getConfigId(): string
     {
-        return $this->getStringValue(['parameters', 'branchId']);
+        $configId = self::getEnvKbcConfigId();
+        if (!$configId) {
+            $configId = $this->getStringValue(['configId']);
+        }
+        return $configId;
     }
 
     public function getResourceAction(): string
