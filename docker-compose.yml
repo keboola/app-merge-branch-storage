@@ -5,3 +5,9 @@ services:
     volumes:
       - ./:/code
       - ./data:/data
+    environment:
+      - KBC_URL
+      - KBC_TOKEN
+      - KBC_BRANCHID
+      - KBC_CONFIGID
+
