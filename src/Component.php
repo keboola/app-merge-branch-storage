@@ -9,6 +9,7 @@ use Keboola\Component\UserException;
 use Keboola\MergeBrancheStorage\Configuration\Config;
 use Keboola\MergeBrancheStorage\Configuration\ConfigDefinition;
 use Keboola\MergeBrancheStorage\Configuration\SynchronizeConfigDefinition;
+use Keboola\StorageApi\ClientException;
 
 class Component extends BaseComponent
 {
@@ -20,7 +21,11 @@ class Component extends BaseComponent
         $clientFactory = new ClientFactory($this->getConfig());
         $application = new Application($clientFactory->getClient(), $this->getLogger(), $this->getDataDir());
         $this->getLogger()->info('Application started.');
-        $application->run($this->getConfig());
+        try {
+            $application->run($this->getConfig());
+        } catch (ClientException $e) {
+            throw new UserException($e->getMessage(), $e->getCode(), $e);
+        }
     }
 
     public function runSynchronizeResources(): array
