@@ -246,7 +246,7 @@ class Application
                     foreach ($columnsMetadata as $provider => $columnMetadata) {
                         $tableMetadataOptions = new TableMetadataUpdateOptions(
                             $tableId,
-                            $provider,
+                            (string) $provider,
                             null,
                             $columnMetadata
                         );
