@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Keboola\MergeBrancheStorage;
 
 use Keboola\Component\BaseComponent;
+use Keboola\Component\UserException;
 use Keboola\MergeBrancheStorage\Configuration\Config;
 use Keboola\MergeBrancheStorage\Configuration\ConfigDefinition;
 use Keboola\MergeBrancheStorage\Configuration\SynchronizeConfigDefinition;
@@ -27,7 +28,14 @@ class Component extends BaseComponent
         $clientFactory = new ClientFactory($this->getConfig());
         $application = new Application($clientFactory->getClient(), $this->getLogger(), $this->getDataDir());
 
-        $application->synchronizeResources($this->getConfig()->getConfigId());
+        try {
+            $application->synchronizeResources($this->getConfig()->getConfigId());
+        } catch (UserException $e) {
+            return [
+                'status' => 'error',
+                'message' => $e->getMessage(),
+            ];
+        }
 
         return [
             'status' => 'success',

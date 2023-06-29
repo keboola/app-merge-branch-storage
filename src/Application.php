@@ -85,7 +85,16 @@ class Application
             $resourceId = $configuration['parameters']['resourceId'] ?? null;
             $resourceValues = $configuration['parameters']['values'];
 
-            $rawResource = $this->getRawResource($action, $resourceId, $resourceValues);
+            try {
+                $rawResource = $this->getRawResource($action, $resourceId, $resourceValues);
+            } catch (ClientException $e) {
+                throw new UserException(sprintf(
+                    'Failed synchronizing config row "%s" (%s) with error message: %s.',
+                    $configurationRow['name'],
+                    $configurationRow['id'],
+                    $e->getMessage()
+                ));
+            }
             $configuration['parameters']['rawResourceJson'] = $rawResource ?? [];
 
             $configOptions = new Configuration();
@@ -275,13 +284,13 @@ class Application
         $table = $this->client->getTable($tableId);
 
         foreach ($resources as $resource) {
-            $this->logger->info(sprintf(
-                'Creating column "%s" in table "%s"',
-                $resource['name'],
-                $table['name']
-            ));
             try {
                 if ($table['isTyped'] === true) {
+                    $this->logger->info(sprintf(
+                        'Creating column "%s" in table "%s"',
+                        $resource['name'],
+                        $table['name']
+                    ));
                     $this->client->addTableColumn(
                         $tableId,
                         $resource['name'],
@@ -289,6 +298,11 @@ class Application
                         $resource['basetype']
                     );
                 } else {
+                    $this->logger->info(sprintf(
+                        'Creating column "%s" in table "%s"',
+                        $resource,
+                        $table['name']
+                    ));
                     $this->client->addTableColumn($tableId, $resource);
                 }
             } catch (ClientException $e) {
@@ -302,7 +316,7 @@ class Application
     {
         $this->logger->info(sprintf('Creating primary keys for table "%s"', $resourceId));
         try {
-            $this->client->createTablePrimaryKey($resourceId, $resourceValues);
+            $this->client->createTablePrimaryKey($resourceId, array_map(fn($v) => trim($v), $resourceValues));
         } catch (ClientException $e) {
             $this->logger->warning($e->getMessage());
         }
