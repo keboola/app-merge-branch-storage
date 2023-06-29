@@ -21,6 +21,7 @@ use Psr\Log\LoggerInterface;
 class Application
 {
     private const SKIP_COLUMN_METADATA_PROVIDER = ['system', 'storage'];
+
     public function __construct(readonly Client $client, readonly LoggerInterface $logger, readonly string $datadir)
     {
     }
@@ -28,42 +29,41 @@ class Application
     public function run(Config $config): void
     {
         switch ($config->getResourceAction()) {
-            case 'ADD_BUCKET':
-                $this->logger->info('Adding bucket');
+            case Config::ACTION_ADD_BUCKET:
                 $resources = (array) json_decode($config->getRawResourceJson(), true);
                 $this->addBucket($resources);
                 break;
-            case 'ADD_TABLE':
+            case Config::ACTION_ADD_TABLE:
                 $resources = (array) json_decode($config->getRawResourceJson(), true);
                 $this->addTable($resources);
                 break;
-            case 'ADD_COLUMN':
+            case Config::ACTION_ADD_COLUMN:
                 if (!$config->getResourceId()) {
                     throw new UserException('Missing resourceId.');
                 }
                 $resources = (array) json_decode($config->getRawResourceJson(), true);
                 $this->addColumn($config->getResourceId(), $resources);
                 break;
-            case 'ADD_PRIMARY_KEY':
+            case Config::ACTION_ADD_PRIMARY_KEY:
                 if (!$config->getResourceId()) {
                     throw new UserException('Missing resourceId.');
                 }
                 $this->addPrimaryKeys($config->getResourceId(), $config->getResourceValues());
                 break;
-            case 'DROP_PRIMARY_KEY':
-                $this->dropPrimaryKeys($config->getResourceValues());
+            case Config::ACTION_DROP_BUCKET:
+                $this->dropBucket($config->getResourceValues());
                 break;
-            case 'DROP_COLUMN':
+            case Config::ACTION_DROP_TABLE:
+                $this->dropTable($config->getResourceValues());
+                break;
+            case Config::ACTION_DROP_COLUMN:
                 if (!$config->getResourceId()) {
                     throw new UserException('Missing resourceId.');
                 }
                 $this->dropColumn($config->getResourceId(), $config->getResourceValues());
                 break;
-            case 'DROP_TABLE':
-                $this->dropTable($config->getResourceValues());
-                break;
-            case 'DROP_BUCKET':
-                $this->dropBucket($config->getResourceValues());
+            case Config::ACTION_DROP_PRIMARY_KEY:
+                $this->dropPrimaryKeys($config->getResourceValues());
                 break;
             default:
                 throw new Exception(sprintf('Unknown action "%s"', $config->getResourceAction()));
@@ -106,11 +106,11 @@ class Application
     private function getRawResource(string $action, ?string $resourceId, array $resourceValues): ?array
     {
         switch ($action) {
-            case 'ADD_BUCKET':
+            case Config::ACTION_ADD_BUCKET:
                 return $this->listBuckets($resourceValues);
-            case 'ADD_TABLE':
+            case Config::ACTION_ADD_TABLE:
                 return $this->listBucketTables($resourceValues);
-            case 'ADD_COLUMN':
+            case Config::ACTION_ADD_COLUMN:
                 if (!$resourceId) {
                     throw new UserException('Missing resourceId.');
                 }
@@ -157,11 +157,13 @@ class Application
     private function addBucket(array $resources): void
     {
         foreach ($resources as $resource) {
+            $bucketName = $resource['name'];
+            $this->logger->info(sprintf('Creating bucket "%s"', $bucketName));
+            if (str_starts_with($bucketName, 'c-')) {
+                $bucketName = substr($bucketName, 2);
+            }
+
             try {
-                $bucketName = $resource['name'];
-                if (str_starts_with($bucketName, 'c-')) {
-                    $bucketName = substr($bucketName, 2);
-                }
                 $this->client->createBucket(
                     $bucketName,
                     $resource['stage'],
@@ -172,6 +174,7 @@ class Application
             } catch (ClientException $e) {
                 $this->logger->warning(sprintf('Bucket "%s" already exists', $resource['name']));
             }
+            $this->logger->info(sprintf('Bucket "%s" created', $bucketName));
         }
     }
 
@@ -179,6 +182,7 @@ class Application
     {
         foreach ($resources as $resource) {
             if ($resource['isTyped'] === true) {
+                $this->logger->info(sprintf('Creating typed table "%s"', $resource['name']));
                 $columns = array_map(function ($v) {
                     return array_filter($v, fn($key) => $key !== 'canBeFiltered', ARRAY_FILTER_USE_KEY);
                 }, $resource['definition']['columns']);
@@ -203,8 +207,13 @@ class Application
                     ];
                 }
 
-                $this->client->createTableDefinition($resource['bucket']['id'], $options);
+                try {
+                    $this->client->createTableDefinition($resource['bucket']['id'], $options);
+                } catch (ClientException $e) {
+                    $this->logger->warning($e->getMessage());
+                }
             } else {
+                $this->logger->info(sprintf('Creating table "%s"', $resource['name']));
                 $options = [
                     'bucketId' => $resource['bucket']['id'],
                     'name' => $resource['name'],
@@ -220,13 +229,19 @@ class Application
                 $filename = $this->datadir . '/emptyTableFile.csv';
                 $file = new CsvFile($filename);
                 $file->writeRow($resource['columns']);
-                $tableId = $this->client->createTableAsync(
-                    $resource['bucket']['id'],
-                    $resource['name'],
-                    $file,
-                    $options
-                );
-                unlink($filename);
+                try {
+                    $tableId = $this->client->createTableAsync(
+                        $resource['bucket']['id'],
+                        $resource['name'],
+                        $file,
+                        $options
+                    );
+                } catch (ClientException $e) {
+                    $this->logger->warning($e->getMessage());
+                    continue;
+                } finally {
+                    unlink($filename);
+                }
 
                 if (!empty($resource['columnMetadata'])) {
                     $columnsMetadata = [];
@@ -254,6 +269,7 @@ class Application
                     }
                 }
             }
+            $this->logger->info(sprintf('Table "%s" created', $resource['name']));
         }
     }
 
@@ -262,6 +278,11 @@ class Application
         $table = $this->client->getTable($tableId);
 
         foreach ($resources as $resource) {
+            $this->logger->info(sprintf(
+                'Creating column "%s" in table "%s"',
+                $resource['name'],
+                $table['name']
+            ));
             try {
                 if ($table['isTyped'] === true) {
                     $this->client->addTableColumn(
@@ -276,64 +297,76 @@ class Application
             } catch (ClientException $e) {
                 $this->logger->warning(sprintf('Column "%s" already exists', $resource['name']));
             }
+            $this->logger->info(sprintf('Column "%s" created', $resource['name']));
         }
     }
 
     private function addPrimaryKeys(string $resourceId, array $resourceValues): void
     {
+        $this->logger->info(sprintf('Creating primary keys for table "%s"', $resourceId));
         try {
             $this->client->createTablePrimaryKey($resourceId, $resourceValues);
         } catch (ClientException $e) {
             $this->logger->warning($e->getMessage());
         }
+        $this->logger->info(sprintf('Primary keys for table "%s" created', $resourceId));
     }
 
     private function dropPrimaryKeys(array $resourceValues): void
     {
         foreach ($resourceValues as $resourceValue) {
+            $this->logger->info(sprintf('Dropping primary keys for table "%s"', $resourceValue));
             try {
                 $this->client->removeTablePrimaryKey($resourceValue);
             } catch (ClientException $e) {
                 $this->logger->warning($e->getMessage());
             }
+            $this->logger->info(sprintf('Primary keys for table "%s" dropped', $resourceValue));
         }
     }
 
     private function dropColumn(string $resourceId, array $resourceValues): void
     {
         foreach ($resourceValues as $resourceValue) {
+            $this->logger->info(sprintf('Dropping column "%s" from table "%s"', $resourceValue, $resourceId));
             try {
                 $this->client->deleteTableColumn($resourceId, $resourceValue, ['force' => true]);
             } catch (ClientException $e) {
                 $this->logger->warning($e->getMessage());
             }
+            $this->logger->info(sprintf('Column "%s" from table "%s" dropped', $resourceValue, $resourceId));
         }
     }
 
     private function dropTable(array $resourceValues): void
     {
         foreach ($resourceValues as $resourceValue) {
+            $this->logger->info(sprintf('Dropping table "%s"', $resourceValue));
             try {
                 $this->client->dropTable($resourceValue, ['force' => true]);
             } catch (ClientException $e) {
                 $this->logger->warning($e->getMessage());
             }
+            $this->logger->info(sprintf('Table "%s" dropped', $resourceValue));
         }
     }
 
     private function dropBucket(array $resourceValues): void
     {
         foreach ($resourceValues as $resourceValue) {
+            $this->logger->info(sprintf('Dropping bucket "%s"', $resourceValue));
             try {
                 $this->client->dropBucket($resourceValue, ['force' => true, 'async' => true]);
             } catch (ClientException $e) {
                 $this->logger->warning($e->getMessage());
             }
+            $this->logger->info(sprintf('Bucket "%s" dropped', $resourceValue));
         }
     }
 
     private function disableConfigurationRow(Config $config): void
     {
+        $this->logger->info(sprintf('Disabling configuration row "%s"', $config->getEnvKbcConfigRowId()));
         $components = new Components($this->client);
         $configOptions = new Configuration();
         $configOptions
@@ -346,5 +379,6 @@ class Application
             ->setIsDisabled(true)
         ;
         $components->updateConfigurationRow($configRowOptions);
+        $this->logger->info(sprintf('Configuration row "%s" disabled', $config->getEnvKbcConfigRowId()));
     }
 }
