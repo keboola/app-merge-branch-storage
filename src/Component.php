@@ -17,10 +17,8 @@ class Component extends BaseComponent
 
     protected function run(): void
     {
-        $this->getLogger()->info('Starting application.');
         $clientFactory = new ClientFactory($this->getConfig());
         $application = new Application($clientFactory->getClient(), $this->getLogger(), $this->getDataDir());
-        $this->getLogger()->info('Application started.');
         try {
             $application->run($this->getConfig());
         } catch (ClientException $e) {

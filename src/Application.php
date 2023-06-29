@@ -215,9 +215,9 @@ class Application
                 $options = [
                     'bucketId' => $resource['bucket']['id'],
                     'name' => $resource['name'],
-                    'primaryKey' => isset($resource['primaryKey']) ? implode(', ', $resource['primaryKey']) : null,
+                    'primaryKey' => isset($resource['primaryKey']) ? implode(',', $resource['primaryKey']) : null,
                     'distributionKey' => isset($resource['distributionKey']) ?
-                        implode(', ', $resource['distributionKey']) :
+                        implode(',', $resource['distributionKey']) :
                         null,
                     'transactional' => $resource['transactional'] ?? false,
                     'columns' => $resource['columns'] ?? null,
