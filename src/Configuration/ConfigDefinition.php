@@ -31,7 +31,7 @@ class ConfigDefinition extends BaseConfigDefinition
                 ->arrayNode('values')
                     ->scalarPrototype()->end()
                 ->end()
-                ->scalarNode('rawResourceJson')->isRequired()->end()
+                ->arrayNode('rawResourceJson')->isRequired()->ignoreExtraKeys(false)->end()
             ->end()
         ;
         // @formatter:on

@@ -30,19 +30,16 @@ class Application
     {
         switch ($config->getResourceAction()) {
             case Config::ACTION_ADD_BUCKET:
-                $resources = (array) json_decode($config->getRawResourceJson(), true);
-                $this->addBucket($resources);
+                $this->addBucket($config->getRawResourceJson());
                 break;
             case Config::ACTION_ADD_TABLE:
-                $resources = (array) json_decode($config->getRawResourceJson(), true);
-                $this->addTable($resources);
+                $this->addTable($config->getRawResourceJson());
                 break;
             case Config::ACTION_ADD_COLUMN:
                 if (!$config->getResourceId()) {
                     throw new UserException('Missing resourceId.');
                 }
-                $resources = (array) json_decode($config->getRawResourceJson(), true);
-                $this->addColumn($config->getResourceId(), $resources);
+                $this->addColumn($config->getResourceId(), $config->getRawResourceJson());
                 break;
             case Config::ACTION_ADD_PRIMARY_KEY:
                 if (!$config->getResourceId()) {
@@ -89,7 +86,7 @@ class Application
             $resourceValues = $configuration['parameters']['values'];
 
             $rawResource = $this->getRawResource($action, $resourceId, $resourceValues);
-            $configuration['parameters']['rawResourceJson'] = $rawResource ? json_encode($rawResource) : null;
+            $configuration['parameters']['rawResourceJson'] = $rawResource ?? [];
 
             $configOptions = new Configuration();
             $configOptions->setComponentId(Config::COMPONENT_ID);

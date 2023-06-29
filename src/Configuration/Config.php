@@ -55,8 +55,8 @@ class Config extends BaseConfig
         return $this->getArrayValue(['parameters', 'values']);
     }
 
-    public function getRawResourceJson(): string
+    public function getRawResourceJson(): array
     {
-        return $this->getStringValue(['parameters', 'rawResourceJson']);
+        return $this->getArrayValue(['parameters', 'rawResourceJson']);
     }
 }
