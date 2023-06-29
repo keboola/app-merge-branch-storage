@@ -281,6 +281,7 @@ class Application
                     $resource['definition'],
                     $resource['basetype']
                 );
+                $this->logger->info(sprintf('Column "%s" created', $resource['name']));
             } else {
                 $this->logger->info(sprintf(
                     'Creating column "%s" in table "%s"',
@@ -288,8 +289,8 @@ class Application
                     $table['name']
                 ));
                 $this->client->addTableColumn($tableId, $resource);
+                $this->logger->info(sprintf('Column "%s" created', $resource));
             }
-            $this->logger->info(sprintf('Column "%s" created', $resource['name']));
         }
     }
 
