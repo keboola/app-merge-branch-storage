@@ -10,4 +10,5 @@ services:
       - KBC_TOKEN
       - KBC_BRANCHID
       - KBC_CONFIGID
+      - KBC_CONFIGROWID
 

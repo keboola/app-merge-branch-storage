@@ -68,6 +68,8 @@ class Application
             default:
                 throw new Exception(sprintf('Unknown action "%s"', $config->getResourceAction()));
         }
+
+        $this->disableConfigurationRow($config);
     }
 
     public function synchronizeResources(string $configId): void
@@ -318,5 +320,21 @@ class Application
                 $this->logger->warning($e->getMessage());
             }
         }
+    }
+
+    private function disableConfigurationRow(Config $config): void
+    {
+        $components = new Components($this->client);
+        $configOptions = new Configuration();
+        $configOptions
+            ->setComponentId(Config::COMPONENT_ID)
+            ->setConfigurationId($config->getEnvKbcConfigId())
+        ;
+        $configRowOptions = new ConfigurationRow($configOptions);
+        $configRowOptions
+            ->setRowId($config->getEnvKbcConfigRowId())
+            ->setIsDisabled(true)
+        ;
+        $components->updateConfigurationRow($configRowOptions);
     }
 }
