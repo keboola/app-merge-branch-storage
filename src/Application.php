@@ -220,7 +220,12 @@ class Application
                 $filename = $this->datadir . '/emptyTableFile.csv';
                 $file = new CsvFile($filename);
                 $file->writeRow($resource['columns']);
-                $tableId = $this->client->createTableAsync($resource['bucket']['id'], $resource['name'], $file, $options);
+                $tableId = $this->client->createTableAsync(
+                    $resource['bucket']['id'],
+                    $resource['name'],
+                    $file,
+                    $options
+                );
                 unlink($filename);
 
                 if (!empty($resource['columnMetadata'])) {
@@ -239,7 +244,12 @@ class Application
 
                     $clientMetadata = new Metadata($this->client);
                     foreach ($columnsMetadata as $provider => $columnMetadata) {
-                        $tableMetadataOptions = new TableMetadataUpdateOptions($tableId, $provider, null, $columnMetadata);
+                        $tableMetadataOptions = new TableMetadataUpdateOptions(
+                            $tableId,
+                            $provider,
+                            null,
+                            $columnMetadata
+                        );
                         $clientMetadata->postTableMetadataWithColumns($tableMetadataOptions);
                     }
                 }
