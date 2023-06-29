@@ -11,13 +11,16 @@ use Keboola\MergeBrancheStorage\Configuration\Config;
 use Keboola\StorageApi\Client;
 use Keboola\StorageApi\ClientException;
 use Keboola\StorageApi\Components;
+use Keboola\StorageApi\Metadata;
 use Keboola\StorageApi\Options\Components\Configuration;
 use Keboola\StorageApi\Options\Components\ConfigurationRow;
 use Keboola\StorageApi\Options\Components\ListConfigurationRowsOptions;
+use Keboola\StorageApi\Options\Metadata\TableMetadataUpdateOptions;
 use Psr\Log\LoggerInterface;
 
 class Application
 {
+    private const SKIP_COLUMN_METADATA_PROVIDER = ['system', 'storage'];
     public function __construct(readonly Client $client, readonly LoggerInterface $logger, readonly string $datadir)
     {
     }
@@ -215,8 +218,29 @@ class Application
                 $filename = $this->datadir . '/emptyTableFile.csv';
                 $file = new CsvFile($filename);
                 $file->writeRow($resource['columns']);
-                $this->client->createTableAsync($resource['bucket']['id'], $resource['name'], $file, $options);
+                $tableId = $this->client->createTableAsync($resource['bucket']['id'], $resource['name'], $file, $options);
                 unlink($filename);
+
+                if (!empty($resource['columnMetadata'])) {
+                    $columnsMetadata = [];
+                    foreach ($resource['columnMetadata'] as $column => $metadatas) {
+                        foreach ($metadatas as $metadata) {
+                            if (in_array($metadata['provider'], self::SKIP_COLUMN_METADATA_PROVIDER)) {
+                                continue;
+                            }
+                            $columnsMetadata[$metadata['provider']][$column][] = [
+                                'key' => $metadata['key'],
+                                'value' => $metadata['value'],
+                            ];
+                        }
+                    }
+
+                    $clientMetadata = new Metadata($this->client);
+                    foreach ($columnsMetadata as $provider => $columnMetadata) {
+                        $tableMetadataOptions = new TableMetadataUpdateOptions($tableId, $provider, null, $columnMetadata);
+                        $clientMetadata->postTableMetadataWithColumns($tableMetadataOptions);
+                    }
+                }
             }
         }
     }
