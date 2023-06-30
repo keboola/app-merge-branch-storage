@@ -3,9 +3,9 @@ name: 'GitHub Actions'
     - push
 concurrency: 'ci-${{ github.ref }}'
 env:
-    APP_IMAGE: keboola-component
+    APP_IMAGE: keboola/app-merge-branch-storage
     KBC_DEVELOPERPORTAL_VENDOR: keboola
-    KBC_DEVELOPERPORTAL_APP: keboola.app-merge-branche-storage
+    KBC_DEVELOPERPORTAL_APP: keboola.app-merge-branch-storage
     KBC_DEVELOPERPORTAL_USERNAME: "keboola+app_merge_branche_storage_gh_actions"
     KBC_DEVELOPERPORTAL_PASSWORD: '${{ secrets.KBC_DEVELOPERPORTAL_PASSWORD }}'
     DOCKERHUB_USER: 'keboolabot'
