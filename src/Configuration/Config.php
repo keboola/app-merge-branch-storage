@@ -8,7 +8,7 @@ use Keboola\Component\Config\BaseConfig;
 
 class Config extends BaseConfig
 {
-    public const COMPONENT_ID = 'keboola.app-merge-branche-storage';
+    public const COMPONENT_ID = 'keboola.app-merge-branch-storage';
 
     public const ACTION_ADD_BUCKET = 'ADD_BUCKET';
 
