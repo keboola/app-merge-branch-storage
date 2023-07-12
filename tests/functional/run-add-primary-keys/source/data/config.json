@@ -1,0 +1,11 @@
+{
+  "parameters": {
+    "action": "ADD_PRIMARY_KEY",
+    "resourceId": "in.c-testCreateBucket.testTable",
+    "values": [
+      "column1",
+      "column2"
+    ],
+    "rawResourceJson": null
+  }
+}
