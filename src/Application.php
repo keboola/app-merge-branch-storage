@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Keboola\MergeBrancheStorage;
+namespace Keboola\MergeBranchStorage;
 
 use Exception;
 use Keboola\Component\UserException;
 use Keboola\Csv\CsvFile;
-use Keboola\MergeBrancheStorage\Configuration\Config;
+use Keboola\MergeBranchStorage\Configuration\Config;
 use Keboola\StorageApi\Client;
 use Keboola\StorageApi\ClientException;
 use Keboola\StorageApi\Components;

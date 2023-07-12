@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Keboola\MergeBrancheStorage\Configuration;
+namespace Keboola\MergeBranchStorage\Configuration;
 
 use Keboola\Component\Config\BaseConfig;
 

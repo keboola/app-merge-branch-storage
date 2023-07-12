@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Keboola\MergeBrancheStorage\FunctionalTests;
+namespace Keboola\MergeBranchStorage\FunctionalTests;
 
 use Keboola\DatadirTests\DatadirTestCase;
 use Keboola\DatadirTests\DatadirTestSpecificationInterface;
-use Keboola\MergeBrancheStorage\Configuration\Config;
+use Keboola\MergeBranchStorage\Configuration\Config;
 use Keboola\StorageApi\Client;
 use Keboola\StorageApi\Components;
 use Keboola\StorageApi\Options\Components\ListComponentConfigurationsOptions;

@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Keboola\MergeBrancheStorage;
+namespace Keboola\MergeBranchStorage;
 
-use Keboola\MergeBrancheStorage\Configuration\Config;
+use Keboola\MergeBranchStorage\Configuration\Config;
 use Keboola\StorageApi\BranchAwareClient;
 use Keboola\StorageApi\Client;
 

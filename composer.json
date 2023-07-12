@@ -1,6 +1,6 @@
 {
-    "name": "keboola/my-component",
-    "description": "MyComponent description",
+    "name": "keboola/app-merge-branch-storage",
+    "description": "Merge branch storage",
     "license": "MIT",
     "require": {
         "php": "^8.2",
@@ -19,13 +19,13 @@
     },
     "autoload": {
         "psr-4": {
-            "Keboola\\MergeBrancheStorage\\": "src/"
+            "Keboola\\MergeBranchStorage\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Keboola\\MergeBrancheStorage\\Tests\\": "tests/phpunit/",
-            "Keboola\\MergeBrancheStorage\\FunctionalTests\\": "tests/functional/"
+            "Keboola\\MergeBranchStorage\\Tests\\": "tests/phpunit/",
+            "Keboola\\MergeBranchStorage\\FunctionalTests\\": "tests/functional/"
         }
     },
     "scripts": {

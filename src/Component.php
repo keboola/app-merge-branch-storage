@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Keboola\MergeBrancheStorage;
+namespace Keboola\MergeBranchStorage;
 
 use Keboola\Component\BaseComponent;
 use Keboola\Component\UserException;
-use Keboola\MergeBrancheStorage\Configuration\Config;
-use Keboola\MergeBrancheStorage\Configuration\ConfigDefinition;
-use Keboola\MergeBrancheStorage\Configuration\SynchronizeConfigDefinition;
+use Keboola\MergeBranchStorage\Configuration\Config;
+use Keboola\MergeBranchStorage\Configuration\ConfigDefinition;
+use Keboola\MergeBranchStorage\Configuration\SynchronizeConfigDefinition;
 use Keboola\StorageApi\ClientException;
 
 class Component extends BaseComponent

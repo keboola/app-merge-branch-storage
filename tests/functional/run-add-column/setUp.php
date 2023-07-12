@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 use Keboola\Csv\CsvFile;
-use Keboola\MergeBrancheStorage\Configuration\Config;
+use Keboola\MergeBranchStorage\Configuration\Config;
 use Keboola\StorageApi\Client;
 use Keboola\StorageApi\Components;
 use Keboola\StorageApi\Options\Components\Configuration;
