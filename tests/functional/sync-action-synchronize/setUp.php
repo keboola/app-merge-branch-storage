@@ -9,7 +9,7 @@ use Keboola\StorageApi\Components;
 use Keboola\StorageApi\Options\Components\Configuration;
 use Keboola\StorageApi\Options\Components\ConfigurationRow;
 
-return function (Client $client, string $testDir): string {
+return function (Client $client, string $testDir): void {
     $bucket = $client->createBucket('testCreateBucket', 'in');
     $table = $client->createTableAsync(
         $bucket,
@@ -78,5 +78,5 @@ return function (Client $client, string $testDir): string {
         throw new RuntimeException('Configuration ID must be string');
     }
 
-    return (string) $configuration->getConfigurationId();
+    putenv(sprintf('CONFIG_ID=%s', $configuration->getConfigurationId()));
 };

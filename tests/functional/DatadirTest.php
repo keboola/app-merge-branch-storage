@@ -63,8 +63,7 @@ class DatadirTest extends DatadirTestCase
             }
 
             // Invoke callback
-            $configId = $initCallback($apiClient, $this->testProjectDir);
-            putenv(sprintf('CONFIG_ID=%s', $configId));
+            $initCallback($apiClient, $this->testProjectDir);
         }
     }
 
