@@ -13,6 +13,8 @@ env:
     KBC_STORAGE_TOKEN: '${{ secrets.KBC_STORAGE_TOKEN }}'
     KBC_TEST_PROJECT_URL: 'https://connection.keboola.com/'
     KBC_TEST_PROJECT_CONFIGS: ''
+    KBC_CONFIGID: ''
+    KBC_CONFIGROWID: ''
 jobs:
     build:
         runs-on: ubuntu-latest
@@ -77,6 +79,8 @@ jobs:
                     docker run \
                     -e KBC_URL=${{env.KBC_TEST_PROJECT_URL}} \
                     -e KBC_TOKEN=${{env.KBC_STORAGE_TOKEN}} \
+                    -e KBC_CONFIGID=${{env.KBC_CONFIGID}} \
+                    -e KBC_CONFIGROWID=${{env.KBC_CONFIGROWID}} \
                     ${{env.APP_IMAGE}} \
                     composer ci
     tests-in-kbc:
