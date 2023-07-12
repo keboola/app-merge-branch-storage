@@ -33,7 +33,7 @@ return function (Client $client, string $testDir): void {
                 true
             )
         )
-        ->setName('test add column')
+        ->setName('test drop bucket')
     ;
 
     $configRow = $components->addConfigurationRow($configurationRow);

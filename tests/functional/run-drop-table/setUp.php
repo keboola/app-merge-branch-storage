@@ -39,7 +39,7 @@ return function (Client $client, string $testDir): void {
                 true
             )
         )
-        ->setName('test add column')
+        ->setName('test drop table')
     ;
 
     $configRow = $components->addConfigurationRow($configurationRow);

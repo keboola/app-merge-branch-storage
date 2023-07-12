@@ -41,7 +41,7 @@ return function (Client $client, string $testDir): void {
                 true
             )
         )
-        ->setName('test add column')
+        ->setName('test drop primary keys')
     ;
 
     $configRow = $components->addConfigurationRow($configurationRow);
