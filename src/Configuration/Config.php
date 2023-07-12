@@ -29,9 +29,9 @@ class Config extends BaseConfig
 
     public function getConfigId(): string
     {
-        $configId = self::getEnvKbcConfigId();
+        $configId = $this->getStringValue(['configId']);
         if (!$configId) {
-            $configId = $this->getStringValue(['configId']);
+            $configId = self::getEnvKbcConfigId();
         }
         return $configId;
     }

@@ -141,7 +141,34 @@ class Application
 
     private function listBucketTables(array $resourceValues): array
     {
-        return array_map(fn($table) => $this->client->getTable($table), $resourceValues);
+        $tables = [];
+        foreach ($resourceValues as $resourceValue) {
+            array_map(fn($table) => $this->client->getTable($table), $resourceValues);
+            $table = array_filter(
+                $this->client->getTable($resourceValue),
+                fn($key) => in_array($key, [
+                    'isTyped',
+                    'name',
+                    'definition',
+                    'distributionType',
+                    'distributionKey',
+                    'indexType',
+                    'indexKey',
+                    'bucket',
+                    'primaryKey',
+                    'transactional',
+                    'columns',
+                    'syntheticPrimaryKeyEnabled',
+                    'columnMetadata',
+                ]),
+                ARRAY_FILTER_USE_KEY
+            );
+
+            $table['bucket'] = array_filter($table['bucket'], fn($key) => $key === 'id', ARRAY_FILTER_USE_KEY);
+
+            $tables[] = $table;
+        }
+        return $tables;
     }
 
     private function listTableColumns(string $resourceId, array $resourceValues): array

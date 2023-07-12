@@ -1,0 +1,10 @@
+[
+  {
+    "id": "in.c-testCreateBucket",
+    "name": "c-testCreateBucket",
+    "displayName": "testCreateBucket",
+    "stage": "in",
+    "description": "",
+    "backend": "snowflake"
+  }
+]
