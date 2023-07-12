@@ -1,0 +1,11 @@
+{
+  "parameters": {
+    "action": "DROP_COLUMN",
+    "resourceId": "in.c-testCreateBucket.testTable",
+    "values": [
+      "column1",
+      "column3"
+    ],
+    "rawResourceJson": null
+  }
+}

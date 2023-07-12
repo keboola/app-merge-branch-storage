@@ -1,0 +1,4 @@
+Dropping primary keys for table "in.c-testCreateBucket.testTable"
+Primary keys for table "in.c-testCreateBucket.testTable" dropped
+Disabling configuration row "%s"
+Configuration row "%s" disabled

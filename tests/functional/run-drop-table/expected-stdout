@@ -1,0 +1,4 @@
+Dropping table "in.c-testCreateBucket.testTable"
+Table "in.c-testCreateBucket.testTable" dropped
+Disabling configuration row "%s"
+Configuration row "%s" disabled
