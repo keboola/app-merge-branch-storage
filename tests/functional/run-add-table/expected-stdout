@@ -1,0 +1,6 @@
+Creating table "testTable"
+Table "testTable" created
+Creating typed table "testTableTypes"
+Table "testTableTypes" created
+Disabling configuration row "%s"
+Configuration row "%s" disabled

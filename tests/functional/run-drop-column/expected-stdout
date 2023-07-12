@@ -1,0 +1,6 @@
+Dropping column "column1" from table "in.c-testCreateBucket.testTable"
+Column "column1" from table "in.c-testCreateBucket.testTable" dropped
+Dropping column "column3" from table "in.c-testCreateBucket.testTable"
+Column "column3" from table "in.c-testCreateBucket.testTable" dropped
+Disabling configuration row "%s"
+Configuration row "%s" disabled

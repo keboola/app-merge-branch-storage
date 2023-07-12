@@ -1,0 +1,103 @@
+{
+  "parameters": {
+    "action": "ADD_TABLE",
+    "values": [
+      "in.c-testCreateBucket.testTable",
+      "in.c-testCreateBucket.testTableTypes"
+    ],
+    "rawResourceJson": [
+      {
+        "name": "testTable",
+        "transactional": false,
+        "primaryKey": [],
+        "indexType": null,
+        "indexKey": [],
+        "distributionType": null,
+        "distributionKey": [],
+        "syntheticPrimaryKeyEnabled": false,
+        "isTyped": false,
+        "columns": [
+          "column1",
+          "column2",
+          "column3"
+        ],
+        "columnMetadata": [],
+        "bucket": {
+          "id": "in.c-testCreateBucket"
+        }
+      },
+      {
+        "name": "testTableTypes",
+        "transactional": false,
+        "primaryKey": [
+          "column1",
+          "column2"
+        ],
+        "indexType": null,
+        "indexKey": [],
+        "distributionType": null,
+        "distributionKey": [],
+        "syntheticPrimaryKeyEnabled": false,
+        "isTyped": true,
+        "columns": [
+          "column1",
+          "column2",
+          "column3",
+          "column4"
+        ],
+        "columnMetadata": null,
+        "bucket": {
+          "id": "in.c-testCreateBucket"
+        },
+        "definition": {
+          "primaryKeysNames": [
+            "column1",
+            "column2"
+          ],
+          "columns": [
+            {
+              "name": "column1",
+              "definition": {
+                "type": "NUMBER",
+                "nullable": false,
+                "length": "1,0"
+              },
+              "basetype": "NUMERIC",
+              "canBeFiltered": true
+            },
+            {
+              "name": "column2",
+              "definition": {
+                "type": "VARCHAR",
+                "nullable": false,
+                "length": "1000"
+              },
+              "basetype": "STRING",
+              "canBeFiltered": true
+            },
+            {
+              "name": "column3",
+              "definition": {
+                "type": "TIMESTAMP_NTZ",
+                "nullable": false,
+                "length": "7"
+              },
+              "basetype": "TIMESTAMP",
+              "canBeFiltered": true
+            },
+            {
+              "name": "column4",
+              "definition": {
+                "type": "NUMBER",
+                "nullable": false,
+                "length": "38,0"
+              },
+              "basetype": "NUMERIC",
+              "canBeFiltered": true
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

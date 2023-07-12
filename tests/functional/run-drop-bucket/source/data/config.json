@@ -1,0 +1,9 @@
+{
+  "parameters": {
+    "action": "DROP_BUCKET",
+    "values": [
+      "in.c-testCreateBucket"
+    ],
+    "rawResourceJson": null
+  }
+}

@@ -1,0 +1,5 @@
+{
+  "action": "synchronize_resources",
+  "configId": "%env(string:CONFIG_ID)%",
+  "parameters": {}
+}

@@ -1,0 +1,9 @@
+{
+  "parameters": {
+    "action": "DROP_TABLE",
+    "values": [
+      "in.c-testCreateBucket.testTable"
+    ],
+    "rawResourceJson": null
+  }
+}

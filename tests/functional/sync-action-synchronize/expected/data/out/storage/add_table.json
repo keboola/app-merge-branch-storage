@@ -1,0 +1,22 @@
+[
+  {
+    "name": "testTable",
+    "transactional": false,
+    "primaryKey": [],
+    "indexType": null,
+    "indexKey": [],
+    "distributionType": null,
+    "distributionKey": [],
+    "syntheticPrimaryKeyEnabled": false,
+    "isTyped": false,
+    "columns": [
+      "column1",
+      "column2",
+      "column3"
+    ],
+    "columnMetadata": [],
+    "bucket": {
+      "id": "in.c-testCreateBucket"
+    }
+  }
+]

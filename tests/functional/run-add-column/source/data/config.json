@@ -1,0 +1,12 @@
+{
+  "parameters": {
+    "action": "ADD_COLUMN",
+    "resourceId": "in.c-testCreateBucket.testTable",
+    "values": [
+      "column4"
+    ],
+    "rawResourceJson": [
+      "column4"
+    ]
+  }
+}

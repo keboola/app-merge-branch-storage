@@ -1,0 +1,18 @@
+{
+  "parameters": {
+    "action": "ADD_BUCKET",
+    "values": [
+      "in.c-testCreateBucket"
+    ],
+    "rawResourceJson": [
+      {
+        "id": "in.c-testCreateBucket",
+        "name": "c-testCreateBucket",
+        "displayName": "testCreateBucket",
+        "stage": "in",
+        "description": "",
+        "backend": "snowflake"
+      }
+    ]
+  }
+}
