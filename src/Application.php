@@ -64,6 +64,9 @@ class Application
             case Config::ACTION_DROP_PRIMARY_KEY:
                 $runAction->dropPrimaryKeys($config->getResourceValues());
                 break;
+            case Config::ACTION_EDIT_COLUMNS_METADATA:
+                $runAction->editTablesColumnsMetadata($config->getRawResourceJson());
+                break;
             default:
                 throw new Exception(sprintf('Unknown action "%s"', $config->getResourceAction()));
         }

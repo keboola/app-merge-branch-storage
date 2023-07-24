@@ -28,6 +28,8 @@ class SynchronizeAction
                     throw new UserException('Missing resourceId.');
                 }
                 return $this->listTableColumns($resourceId, $resourceValues);
+            case Config::ACTION_EDIT_COLUMNS_METADATA:
+                return $this->listTableColumnsMetadata($resourceValues);
             default:
                 return null;
         }
@@ -92,5 +94,23 @@ class SynchronizeAction
 
             return array_values($filteredColumns);
         }
+    }
+
+    private function listTableColumnsMetadata(array $resourceValues): array
+    {
+        $tmp = [];
+        foreach ($resourceValues as $resourceValue) {
+            $table = $this->client->getTable($resourceValue);
+
+            $filteredTable = array_filter(
+                $table,
+                fn($key) => in_array($key, ['id', 'columnMetadata']),
+                ARRAY_FILTER_USE_KEY
+            );
+
+            $tmp[] = $filteredTable;
+        }
+
+        return $tmp;
     }
 }

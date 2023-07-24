@@ -92,31 +92,8 @@ class RunAction
                     $options
                 );
 
-                if (!empty($resource['columnMetadata'])) {
-                    $columnsMetadata = [];
-                    foreach ($resource['columnMetadata'] as $column => $metadatas) {
-                        foreach ($metadatas as $metadata) {
-                            if (in_array($metadata['provider'], self::SKIP_COLUMN_METADATA_PROVIDER)) {
-                                continue;
-                            }
-                            $columnsMetadata[$metadata['provider']][$column][] = [
-                                'key' => $metadata['key'],
-                                'value' => $metadata['value'],
-                            ];
-                        }
-                    }
-
-                    $clientMetadata = new Metadata($this->client);
-                    foreach ($columnsMetadata as $provider => $columnMetadata) {
-                        $tableMetadataOptions = new TableMetadataUpdateOptions(
-                            $tableId,
-                            (string) $provider,
-                            null,
-                            $columnMetadata
-                        );
-                        $clientMetadata->postTableMetadataWithColumns($tableMetadataOptions);
-                    }
-                }
+                $resource['id'] = $tableId;
+                $this->editTableColumnsMetadata($resource);
             }
             $this->logger->info(sprintf('Table "%s" created', $resource['name']));
         }
@@ -193,5 +170,45 @@ class RunAction
             $this->client->dropBucket($resourceValue, ['force' => true, 'async' => true]);
             $this->logger->info(sprintf('Bucket "%s" dropped', $resourceValue));
         }
+    }
+
+    public function editTablesColumnsMetadata(array $resourceValues): void
+    {
+        foreach ($resourceValues as $resourceValue) {
+            $this->editTableColumnsMetadata($resourceValue);
+        }
+    }
+
+    private function editTableColumnsMetadata(array $resourceValue): void
+    {
+        if (empty($resourceValue['columnMetadata'])) {
+            return;
+        }
+
+        $this->logger->info(sprintf('Editing columns metadata for table "%s"', $resourceValue['id']));
+        $columnsMetadata = [];
+        foreach ($resourceValue['columnMetadata'] as $column => $metadatas) {
+            foreach ($metadatas as $metadata) {
+                if (in_array($metadata['provider'], self::SKIP_COLUMN_METADATA_PROVIDER)) {
+                    continue;
+                }
+                $columnsMetadata[$metadata['provider']][$column][] = [
+                    'key' => $metadata['key'],
+                    'value' => $metadata['value'],
+                ];
+            }
+        }
+
+        $clientMetadata = new Metadata($this->client);
+        foreach ($columnsMetadata as $provider => $columnMetadata) {
+            $tableMetadataOptions = new TableMetadataUpdateOptions(
+                $resourceValue['id'],
+                (string) $provider,
+                null,
+                $columnMetadata
+            );
+            $clientMetadata->postTableMetadataWithColumns($tableMetadataOptions);
+        }
+        $this->logger->info(sprintf('Columns metadata for table "%s" edited', $resourceValue['id']));
     }
 }
