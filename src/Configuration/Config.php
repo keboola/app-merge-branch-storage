@@ -18,6 +18,8 @@ class Config extends BaseConfig
 
     public const ACTION_ADD_PRIMARY_KEY = 'ADD_PRIMARY_KEY';
 
+    public const ACTION_EDIT_COLUMNS_METADATA = 'EDIT_COLUMNS_METADATA';
+
     public const ACTION_DROP_BUCKET = 'DROP_BUCKET';
 
     public const ACTION_DROP_TABLE = 'DROP_TABLE';

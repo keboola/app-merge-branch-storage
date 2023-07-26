@@ -26,6 +26,7 @@ class ConfigDefinition extends BaseConfigDefinition
                     'DROP_TABLE',
                     'DROP_COLUMN',
                     'DROP_PRIMARY_KEY',
+                    'EDIT_COLUMNS_METADATA',
                 ])->end()
                 ->scalarNode('resourceId')->defaultNull()->end()
                 ->arrayNode('values')

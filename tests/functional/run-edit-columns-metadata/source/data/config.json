@@ -1,0 +1,39 @@
+{
+  "parameters": {
+    "action": "EDIT_COLUMNS_METADATA",
+    "values": [
+      "in.c-testCreateBucket.testTable"
+    ],
+    "rawResourceJson": [
+      {
+        "id": "in.c-testCreateBucket.testTable",
+        "columnMetadata": {
+          "column1": [
+            {
+              "key": "KBC.datatype.basetype",
+              "value": "STRING",
+              "provider": "user"
+            },
+            {
+              "key": "KBC.datatype.length",
+              "value": "255",
+              "provider": "user"
+            }
+          ],
+          "column2": [
+            {
+              "key": "KBC.datatype.basetype",
+              "value": "NUMERIC",
+              "provider": "user"
+            },
+            {
+              "key": "KBC.datatype.length",
+              "value": "38,2",
+              "provider": "user"
+            }
+          ]
+        }
+      }
+    ]
+  }
+}
