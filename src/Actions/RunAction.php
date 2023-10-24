@@ -67,6 +67,18 @@ class RunAction
                     ];
                 }
 
+                if (isset($resource['definition']['timePartitioning'])) {
+                    $options['timePartitioning'] = $resource['definition']['timePartitioning'];
+                }
+
+                if (isset($resource['definition']['clustering'])) {
+                    $options['clustering'] = $resource['definition']['clustering'];
+                }
+
+                if (isset($resource['definition']['rangePartitioning'])) {
+                    $options['rangePartitioning'] = $resource['definition']['rangePartitioning'];
+                }
+
                 $this->client->createTableDefinition($resource['bucket']['id'], $options);
             } else {
                 $this->logger->info(sprintf('Creating table "%s"', $resource['name']));

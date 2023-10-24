@@ -52,7 +52,6 @@ class SynchronizeAction
     {
         $tables = [];
         foreach ($resourceValues as $resourceValue) {
-            array_map(fn($table) => $this->client->getTable($table), $resourceValues);
             $table = array_filter(
                 $this->client->getTable($resourceValue),
                 fn($key) => in_array($key, [
