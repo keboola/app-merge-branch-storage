@@ -84,6 +84,9 @@ class Application
 
         $configurationRows = $components->listConfigurationRows($listConfigurationRowsOptions);
         foreach ($configurationRows as $configurationRow) {
+            if ($configurationRow['isDisabled']) {
+                continue;
+            }
             $configuration = $configurationRow['configuration'];
 
             $action = $configuration['parameters']['action'];
