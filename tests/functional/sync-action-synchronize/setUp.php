@@ -32,6 +32,22 @@ return function (Client $client, string $testDir): void {
     $configurationRow
         ->setConfiguration([
             'parameters' => [
+                'action' => 'REMOVE_BUCKET',
+                'values' => [
+                    $bucket,
+                ],
+            ],
+        ])
+        ->setName('disabled row')
+        ->setIsDisabled(true)
+    ;
+
+    $components->addConfigurationRow($configurationRow);
+
+    $configurationRow = new ConfigurationRow($configuration);
+    $configurationRow
+        ->setConfiguration([
+            'parameters' => [
                 'action' => 'ADD_BUCKET',
                 'values' => [
                     $bucket,
