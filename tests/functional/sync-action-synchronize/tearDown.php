@@ -28,6 +28,9 @@ return function (Client $client, string $testDir): void {
 
         $configRows = $components->listConfigurationRows($listConfigurationRowsOptions);
         foreach ($configRows as $configRow) {
+            if ($configRow['isDisabled']) {
+                continue;
+            }
             $params = $configRow['configuration']['parameters'];
 
             $filePath = sprintf(
